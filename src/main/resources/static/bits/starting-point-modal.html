@@ -1,0 +1,44 @@
+<div class="modal-header">
+    <h3 class="modal-title">Where should we start?</h3>
+</div>
+<div class="modal-body">
+    <form role="form">
+        <div class="form-group">
+            <label for="seedHostIn" class="main">Cassandra Seed Host</label>
+            <input type="text" class="form-control" id="seedHostIn" ng-model="seedHost" ng-required/>
+        </div>
+
+        <div class="form-group">
+            <label for="primaryProperty" class="main">Primary Property</label>
+            <input type="text" class="form-control" id="primaryProperty" ng-model="primaryProperty" ng-required autofocus=""/>
+            <span class="help-block">This will be used as the label in the view.</span>
+        </div>
+
+        <div class="form-group">
+            <label class="main">Vertex Search Properties</label>
+            <div class="small">
+                <label>Normalize Values</label>
+                <span class="relaxed"><input type="radio" ng-model="normalize" value="none"> No</span>
+                <span class="relaxed"><input type="radio" ng-model="normalize" value="lower"> Lowercase</span>
+                <span class="relaxed"><input type="radio" ng-model="normalize" value="upper"> Uppercase</span>
+            </div>
+            <div class="row" ng-repeat="propertySpec in propertySpecs">
+                <div class="col-xs-5">
+                    <input type="text" class="key form-control" ng-model="propertySpec.key" placeholder="Key" ng-required
+                           ng-change="addAnother($last)" ng-focus="handleInputFocus($event, $last)"/>
+                </div>
+                <div class="col-xs-5">
+                    <input type="text" class="value form-control" ng-model="propertySpec.value" placeholder="Value"
+                           ng-change="addAnother($last)" ng-focus="handleInputFocus($event, $last)"/>
+                </div>
+                <div class="col-xs-1">
+                    <a href="#" ng-hide="$first && $last" ng-click="removeProperty($index)" class="glyphicon glyphicon-remove"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

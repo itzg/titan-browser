@@ -1,0 +1,21 @@
+<alert ng-show="status" type="{{status.type}}">
+    {{status.message}}
+    <button class="btn btn-info" ng-show="status.showCancelAction" ng-click="cancelAction()">Cancel</button>
+</alert>
+
+<div class="focusArea panel panel-default" ng-show="focus.id != undefined">
+    <div class="panel-heading">
+        {{ focus.primaryProperty }} <span class="badge pull-right">{{ focus.id }}</span>
+    </div>
+    <div class="panel-body">
+        <table>
+            <tr ng-repeat="(key,value) in focus.properties | orderBy : key">
+                <th>{{key}}</th>
+                <td><span title="{{value}}">{{value}}</span></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div ng-show="multipleInFocus" class="alert alert-warning" role="alert">
+    Multiple vertices matched the search criteria. Only the first one is shown above.
+</div>

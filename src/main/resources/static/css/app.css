@@ -1,0 +1,68 @@
+
+body {
+    padding: 10px;
+}
+
+#searchArea > .panel-body {
+    height: 500px;
+    margin: 0px;
+    padding: 0px;
+}
+
+input.key {
+    font-weight: bold;
+}
+
+.center-contents {
+    text-align: center;
+}
+
+.edgeListing {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.propertiesListing {
+    margin: 10px;
+}
+
+.propertiesListing th,td {
+    padding: 2px 5px;
+}
+
+.direction-spacer {
+    padding-top: 20px;
+    font-size: 48px;
+}
+
+div#focus {
+    padding: 5px 0;
+}
+
+span.relaxed {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.edgeIn,.edgeOut {
+    margin-top: 5px;
+}
+
+.focusArea .panel-body {
+    overflow-x: hidden;
+}
+
+label.main {
+    font-size: larger;
+}
+
+.configEntry {
+    display: inline-block;
+    margin: 5px;
+    font-size: smaller;
+}
+
+.edgeListing .summary .badge {
+    margin-left: 2px;
+}

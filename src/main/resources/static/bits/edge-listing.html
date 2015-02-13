@@ -1,0 +1,5 @@
+<div ng-class="[edgeClass, 'summary']" ng-repeat="edge in edges">
+    <a href="#" ng-click="focusOn(edge.adjacentId)">{{ edge.primaryProperty }}</a>
+    <span class="badge pull-right" title="Edge Label">{{ edge.label }}</span>
+    <span class="badge pull-right" title="Vertex ID">{{ edge.adjacentId }}</span>
+</div>

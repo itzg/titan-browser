@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html ng-app="titanBrowserApp">
+<head>
+    <base href="/">
+    <title ng-bind="'Titan Browser' + subtitle">Titan Browser</title>
+
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.1/css/bootstrap.css"/>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.1/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+
+    <script src="webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="webjars/angularjs/1.3.8/angular.min.js"></script>
+    <script src="webjars/angular-ui-bootstrap/0.12.0/ui-bootstrap.min.js"></script>
+    <script src="webjars/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="webjars/d3js/3.4.13/d3.min.js"></script>
+
+    <script src="js/directives.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body ng-controller="TitanBrowserCtrl">
+
+<div class="container-fluid">
+
+    <div id="mainHeader" class="row">
+        <div class="col-xs-12">
+            <h1>Titan Browser</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default" id="searchArea">
+                <div class="panel-body">
+                    <div id="edgesIn" class="col-xs-3 edgeListing" titan-browser-edge-listing edges="edgesIn" edge-class="edgeIn"></div>
+
+                    <div class="col-xs-1 direction-spacer">
+                        <span class="glyphicon glyphicon-chevron-right" ng-show="edgesIn.length > 0"></span>
+                    </div>
+                    <div id="focus" class="col-xs-4">
+                        <ng-include src="'bits/focus-area.html'"></ng-include>
+                    </div>
+
+                    <div class="col-xs-1 direction-spacer">
+                        <span class="glyphicon glyphicon-chevron-right" ng-show="edgesOut.length > 0"></span>
+                    </div>
+
+                    <div id="edgesOut" class="col-xs-3 edgeListing" titan-browser-edge-listing edges="edgesOut" edge-class="edgeOut"></div>
+                </div>
+
+                <div class="panel-footer">
+                    <div class="center-contents">
+                        <button type="button" class="btn btn-primary" ng-click="startOver()">Start Over</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-include src="'bits/config-panel.html'"></ng-include>
+
+</div>
+
+
+</body>
+</html>

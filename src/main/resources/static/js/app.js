@@ -199,7 +199,7 @@ angular.module('titanBrowserApp', [
                         })
                         .error(function (data, status) {
                             setStatus(status === 0 ? "Search cancelled." :
-                            "REST operation failed with " + status + ". " + data, true, false);
+                            "REST operation failed with " + status + ". " + data.message, true, false);
                         });
                 })
                 .fail(function (jqHDR, textStatus) {

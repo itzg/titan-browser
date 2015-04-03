@@ -17,6 +17,7 @@ angular.module('titanBrowserApp', [
         var seedHost = "localhost";
         var primaryProperty;
         var actionDeferred;
+        var authentication = {};
 
         function setStatus(message, isError, showCancelAction) {
             $scope.status = {
@@ -127,10 +128,15 @@ angular.module('titanBrowserApp', [
                 var currentSearchParams = $location.search();
                 seedHost = currentSearchParams['s'] || seedHost;
                 primaryProperty = currentSearchParams['p'] || primaryProperty;
+                authentication.authUser = currentSearchParams['u'] || authentication.authUser;
+                if (authentication.authUser) {
+                    authentication.authenticate = true;
+                }
 
                 var newFocusId = currentSearchParams['i'];
 
-                if (angular.isDefined(seedHost) && angular.isDefined(primaryProperty) && angular.isDefined(newFocusId)) {
+                if (angular.isDefined(seedHost) && angular.isDefined(primaryProperty) && angular.isDefined(newFocusId) &&
+                    (authentication.authenticate == false || angular.isDefined(authentication.authPass))) {
                     focusOn(newFocusId);
                 }
                 else {
@@ -152,7 +158,8 @@ angular.module('titanBrowserApp', [
             return $.ajax('configuration', {
                 type: 'PUT',
                 data: {
-                    'titan.cassandra.seedHost': newSeedHost
+                    'titan.cassandra.seedHost': newSeedHost,
+                    'titan.cassandra.authentication': authentication
                 }
             })
         }
@@ -162,7 +169,8 @@ angular.module('titanBrowserApp', [
 
             changeLocation({
                 p: primaryProperty,
-                s: seedHost
+                s: seedHost,
+                u: authentication.authUser
             });
 
             putSeedHost(seedHost)
@@ -224,7 +232,8 @@ angular.module('titanBrowserApp', [
                 resolve: {
                     primaryProperty: function() {return primaryProperty},
                     searchObject: function() {return $scope.focus.properties; },
-                    seedHost: function() { return seedHost; }
+                    seedHost: function() { return seedHost; },
+                    authentication: function() { return authentication; }
                 }
             });
 
@@ -239,6 +248,7 @@ angular.module('titanBrowserApp', [
                 actionDeferred = $q.defer();
 
                 seedHost = result.seedHost;
+                authentication = result.authentication;
                 primaryProperty = result.primaryProperty;
 
                 $scope.handlingRefocus = true;
@@ -251,7 +261,7 @@ angular.module('titanBrowserApp', [
         $scope.$on("$locationChangeStart", handleLocationChangeStart);
     })
 
-    .controller('StartingPointModalCtrl', function ($scope, primaryProperty, searchObject, seedHost) {
+    .controller('StartingPointModalCtrl', function ($scope, primaryProperty, searchObject, seedHost, authentication) {
 
         function convertSearchObject(rawObj) {
             if (angular.isObject(rawObj)) {
@@ -268,6 +278,12 @@ angular.module('titanBrowserApp', [
         $scope.primaryProperty = primaryProperty || '';
         $scope.propertySpecs = convertSearchObject(searchObject);
         $scope.normalize = 'lower';
+
+        $scope.authentication = authentication || {
+            authenticate: false,
+            authUser: '',
+            authPass: ''
+        };
 
         $scope.addAnother = function (isLast) {
             if (isLast) {
@@ -309,7 +325,8 @@ angular.module('titanBrowserApp', [
                 $scope.$close({
                     seedHost: $scope.seedHost,
                     primaryProperty: $scope.primaryProperty,
-                    searchProperties: searchProperties
+                    searchProperties: searchProperties,
+                    authentication: $scope.authentication
                 })
             }
         };

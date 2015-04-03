@@ -35,6 +35,8 @@ public class TitanCassandraServiceImpl implements TitanService, ConfigurationAwa
 
     private String seedHost;
     private TitanGraph titanGraph;
+    private String username;
+    private String password;
 
     void init() {
         if (titanGraph != null) {
@@ -44,8 +46,12 @@ public class TitanCassandraServiceImpl implements TitanService, ConfigurationAwa
         BaseConfiguration config = new BaseConfiguration();
         config.setProperty("storage.backend", "cassandra");
         config.setProperty("storage.hostname", seedHost);
+        if (username != null && password != null) {
+            config.setProperty("storage.username", username);
+            config.setProperty("storage.password", password);
+        }
 
-        LOGGER.debug("Connecting to {}", seedHost);
+        LOGGER.debug("Connecting to {} using {}", seedHost, config);
         titanGraph = TitanFactory.open(config);
     }
 
@@ -56,6 +62,11 @@ public class TitanCassandraServiceImpl implements TitanService, ConfigurationAwa
     public void setSeedHost(String seedHost) {
         this.seedHost = seedHost;
         init();
+    }
+
+    private void setAuthentication(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     @Override
@@ -191,10 +202,18 @@ public class TitanCassandraServiceImpl implements TitanService, ConfigurationAwa
 
     @Override
     public void setConfiguration(Map<String, Object> configuration) {
+        final String authenticateStr = (String) configuration.get("titan.cassandra.authentication[authenticate]");
+        if (Boolean.parseBoolean(authenticateStr)) {
+            setAuthentication(((String) configuration.get("titan.cassandra.authentication[authUser]")),
+                    ((String) configuration.get("titan.cassandra.authentication[authPass]")));
+        }
+
         final Object value = configuration.get("titan.cassandra.seedHost");
         if (value != null) {
             setSeedHost(value.toString());
         }
+
+
     }
 
     private interface EdgeConsumer {

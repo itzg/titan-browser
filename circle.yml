@@ -1,3 +1,14 @@
 general:
   artifacts:
     - "target/*.jar"
+
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
+deployment:
+  releases:
+    branch: master
+    commands:
+      - build-support/handle-mvn-release.sh

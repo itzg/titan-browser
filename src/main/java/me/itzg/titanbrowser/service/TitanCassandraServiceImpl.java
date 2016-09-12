@@ -202,13 +202,16 @@ public class TitanCassandraServiceImpl implements TitanService, ConfigurationAwa
 
     @Override
     public void setConfiguration(Map<String, Object> configuration) {
-        final String authenticateStr = (String) configuration.get("titan.cassandra.authentication[authenticate]");
-        if (Boolean.parseBoolean(authenticateStr)) {
-            setAuthentication(((String) configuration.get("titan.cassandra.authentication[authUser]")),
-                    ((String) configuration.get("titan.cassandra.authentication[authPass]")));
+        final Map<String, Object> authentication = (Map<String, Object>) configuration.get("authentication");
+
+        if (authentication != null) {
+            if (((Boolean) authentication.get("authenticate"))) {
+                setAuthentication((String) authentication.get("authUser"),
+                        ((String) authentication.get("authPass")));
+            }
         }
 
-        final Object value = configuration.get("titan.cassandra.seedHost");
+        final Object value = configuration.get("seedHost");
         if (value != null) {
             setSeedHost(value.toString());
         }

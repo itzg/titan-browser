@@ -81,16 +81,10 @@ public class TitanAccessResource {
         return merged;
     }
 
-    @RequestMapping(value = "/configuration", method = RequestMethod.PUT)
-    public void setConfiguration(@RequestBody MultiValueMap<String, String> configuration) {
+    @RequestMapping(value = "/configuration", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void setConfiguration(@RequestBody Map<String, Object> configuration) {
 
-        Map<String, Object> appliedConfig = new HashMap<>();
-        for (Map.Entry<String, List<String>> givenEntry : configuration.entrySet()) {
-            Preconditions.checkArgument(givenEntry.getValue().size() == 1);
-            appliedConfig.put(givenEntry.getKey(), givenEntry.getValue().get(0));
-        }
-        // read-only for them to use
-        appliedConfig = Collections.unmodifiableMap(appliedConfig);
+        Map<String, Object> appliedConfig = Collections.unmodifiableMap(configuration);
         LOGGER.debug("Setting configuration {}", appliedConfig);
 
         for (ConfigurationAware configurable : configurables) {

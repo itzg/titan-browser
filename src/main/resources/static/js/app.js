@@ -155,12 +155,9 @@ angular.module('titanBrowserApp', [
          * @returns {jQuery Deferred} the pending server operation
          */
         function putSeedHost(newSeedHost) {
-            return $.ajax('configuration', {
-                type: 'PUT',
-                data: {
-                    'titan.cassandra.seedHost': newSeedHost,
-                    'titan.cassandra.authentication': authentication
-                }
+            return $http.put('configuration', {
+                seedHost: newSeedHost,
+                authentication: authentication
             })
         }
 
@@ -174,7 +171,8 @@ angular.module('titanBrowserApp', [
             });
 
             putSeedHost(seedHost)
-                .done(function () {
+                .then(
+                function () {
                     getServerConfig();
 
                     $http.get('/search/vertex', {
@@ -201,11 +199,10 @@ angular.module('titanBrowserApp', [
                             setStatus(status === 0 ? "Search cancelled." :
                             "REST operation failed with " + status + ". " + data.message, true, false);
                         });
-                })
-                .fail(function (jqHDR, textStatus) {
+                },
+                function (response) {
                     setStatus("Failed to configure seed host: " +
-                    jqHDR.responseJSON.error + " : " + jqHDR.responseJSON.message, true, false);
-                    $scope.$apply();
+                        response.data.error + " : " + response.data.message, true, false);
                 });
         }
 
@@ -221,7 +218,7 @@ angular.module('titanBrowserApp', [
             if (angular.isDefined(actionDeferred)) {
                 actionDeferred.resolve("cancelled");
             }
-        }
+        };
 
         $scope.startOver = function() {
             console.debug("startOver");
@@ -301,7 +298,7 @@ angular.module('titanBrowserApp', [
 
         $scope.removeProperty = function(index) {
             $scope.propertySpecs.splice(index, 1);
-        }
+        };
 
         $scope.ok = function () {
             if ($scope.primaryProperty.length > 0) {
